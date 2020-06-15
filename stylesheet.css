@@ -1,0 +1,27 @@
+html, body {
+height: 100%;
+width: 100%
+}
+
+.top-wrapper {
+	height: 100%;
+	width: 100%;
+	background-color: #F5F6CE;
+}
+
+.schedule-view {
+	float: left;
+	display: inline-block;
+	height: 100%;
+	width: 29.5%;
+	border: 1px solid #A4A4A4;
+	background-color: white;
+}
+
+.calendar-view {
+	float: right;
+	display: inline-block;
+	height: 100%;
+	width: 70%;
+	border: 1px solid #A4A4A4;
+}
