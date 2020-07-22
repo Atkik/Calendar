@@ -33,11 +33,6 @@ width: 100%
 	position: absolute;
 }
 
-.month-select {
-	margin-left: 20px;
-	font-size: 10px;
-}
-
 table {
 	border-collapse: collapse;
 	position: absolute;
@@ -76,7 +71,11 @@ th {
 }
 
 td {
-	height: 60px;
+	height: 50px;
 	font-size: 10px;
 	color: #0101DF;
+}
+
+.date {
+	line-heigt: 0px;
 }
