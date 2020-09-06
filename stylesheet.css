@@ -43,7 +43,7 @@ table {
 }
 
 th {
-	width: 70px;
+	width: 110px;
 	color: white;
 	border: 2px solid black;
 }
@@ -71,7 +71,7 @@ th {
 }
 
 td {
-	height: 50px;
+	height: 80px;
 	font-size: 10px;
 	color: #0101DF;
 }
