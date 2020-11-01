@@ -6,7 +6,7 @@ width: 100%
 .top-wrapper {
 	height: 100%;
 	width: 100%;
-	background-color: #F5F6CE;
+	background-color: #f5f6ce;
 }
 
 .schedule-view {
@@ -14,20 +14,14 @@ width: 100%
 	display: inline-block;
 	height: 100%;
 	width: 29.5%;
-	border: 1px solid #A4A4A4;
+	border: 1px solid #a4a4a4;
 	background-color: white;
-}
-
-.schedule-view-title {
-	font-size: 200px;
-	border: 1px solid #A4A4A4;
-	background-color: #B8B8B8;
 }
 
 .schedule-view-main {
 	height: 97%;
-	border: 1px solid #A4A4A4;
-	background-color: #B8B8B8;
+	border: 1px solid #a4a4a4;
+	background-color: #b8b8b8;
 }
 
 .calendar-view {
@@ -35,7 +29,7 @@ width: 100%
 	display: inline-block;
 	height: 100%;
 	width: 70%;
-	border: 1px solid #A4A4A4;
+	border: 1px solid #a4a4a4;
 	position: relative;
 }
 
@@ -63,32 +57,33 @@ th {
 }
 
 .sunday {
-	background-color: #F79F81;
+	background-color: #f79f81;
 }
 .monday {
 	background-color: #848484;
 }
 .tuesday {
-	background-color: #FE2E2E;
+	background-color: #fe2e2e;
 }
 .wednesday {
-	background-color: #81BEF7;
+	background-color: #81bef7;
 }
 .thursday {
-	background-color: #31B404;
+	background-color: #31b404;
 }
 .friday {
-	background-color: #FFFF00;
+	background-color: #ffff00;
 }
 .saturday {
-	background-color: #DBA901;
+	background-color: #dba901;
 }
 
 td {
 	font-size: 30px;
-	color: #0101DF;
+	color: #0101ddf;
 	vertical-align: top;
 }
-td:hover {
-	background-color: #c7c8fc;
+
+#date {
+	background-color: #b8b8b8;
 }

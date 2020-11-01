@@ -6,6 +6,15 @@ function viewMonth(year, month) {
 	monthOutput[0].innerHTML = '<input type="month" id="select-month" value=' + yM + ' onchange="monthCange()">';
 }
 
+//年月変更関数
+function monthCange() {
+	var yM = document.getElementById("select-month").value;
+	//変更された年月でカレンダー表示
+	viewTable(yM.slice(0,4), yM.slice(-2));
+}
+
+
+
 //カレンダー表示関数
 function viewTable(year, month) {
 	//月初
@@ -40,24 +49,54 @@ function viewTable(year, month) {
 			var dayCell = weekRow.insertCell(-1);
 			//月初の曜日から月末まで日付を表示する
 			if(begginingWeekDay > monthStartFlug) {
+				//カレンダーセルにdateのIDを設定
+				dayCell.setAttribute("id","date");
 				monthStartFlug++;
 			} else if(dateCount != (endMonthDate + 1)) {
-				dayCell.innerHTML = '<span class="date">' + dateCount + '</span>';
+				//カレンダーセルにactive-dateクラスとdate_yyyymmddのIDを設定
+				dayCell.setAttribute("class","active-date");
+				dayCell.setAttribute("id","date-" + year + month + dateCount);
+				
+				//背景色を白に設定
+				dayCell.style.backgroundColor = "white";
+				//日付を表示
+				dayCell.innerHTML = '<span>' + dateCount + '</span>';
+				
+				
+				dayCell.onclick = function(){
+					//セルが白くなかったらフラグを立てる
+					var colorFlg = 0;
+					if(document.getElementById(this.id).style.backgroundColor != "white"){
+						colorFlg = 1;
+					}
+					
+					//active-dateクラスのセルをすべて白くする
+					var elem = document.getElementsByClassName("active-date");
+					for (var l = 0; l < elem.length; l++){
+						elem[l].style.backgroundColor = "white";
+					}
+					//schedule-view-mainをグレーアウト
+					document.getElementsByClassName("schedule-view-main")[0].style.backgroundColor = "#b8b8b8";
+					
+					//フラグが立っていない場合（セルが白い場合）
+					if(colorFlg == 0){
+						//セルの背景色を#c7c8fcに変更
+						document.getElementById(this.id).style.backgroundColor = "#c7c8fc";
+						//schedule-view-mainを白く
+						document.getElementsByClassName("schedule-view-main")[0].style.backgroundColor = "white";
+					}
+				}
+				
 				dateCount++;
+			} else {
+				//カレンダーセルにdateクラスを設定
+				dayCell.setAttribute("id","date");
 			}
-			
 		}
 		if(dateCount == (endMonthDate + 1)) {
 			j = 1;
 		}
 	}
-}
-
-//年月変更関数
-function monthCange() {
-	var yM = document.getElementById("select-month").value;
-	//変更された年月でカレンダー表示
-	viewTable(yM.slice(0,4), yM.slice(-2));
 }
 
 var today = new Date();
