@@ -13,7 +13,12 @@ function monthCange() {
 	viewTable(yM.slice(0,4), yM.slice(-2));
 }
 
-
+//スケジュール表示関数
+function showSchedule(date) {
+	//日付をyyyy/mm/ddに整形
+	var showDate = date.substr(5, 4) + "/" + date.substr(10, 2) + "/" + date.substr(13, 2);
+	document.getElementsByClassName("schedule-view-main")[0].innerHTML = '<div class="schedule-date">' + showDate + '</div>';
+}
 
 //カレンダー表示関数
 function viewTable(year, month) {
@@ -55,7 +60,7 @@ function viewTable(year, month) {
 			} else if(dateCount != (endMonthDate + 1)) {
 				//カレンダーセルにactive-dateクラスとdate_yyyymmddのIDを設定
 				dayCell.setAttribute("class","active-date");
-				dayCell.setAttribute("id","date-" + year + month + dateCount);
+				dayCell.setAttribute("id","date-" + year + "-" + month + "-" + ("0" + dateCount).slice(-2));
 				
 				//背景色を白に設定
 				dayCell.style.backgroundColor = "white";
@@ -71,19 +76,27 @@ function viewTable(year, month) {
 					}
 					
 					//active-dateクラスのセルをすべて白くする
-					var elem = document.getElementsByClassName("active-date");
-					for (var l = 0; l < elem.length; l++){
-						elem[l].style.backgroundColor = "white";
+					var elemActivedate = document.getElementsByClassName("active-date");
+					for (var l = 0; l < elemActivedate.length; l++){
+						elemActivedate[l].style.backgroundColor = "white";
 					}
-					//schedule-view-mainをグレーアウト
-					document.getElementsByClassName("schedule-view-main")[0].style.backgroundColor = "#b8b8b8";
 					
+					var elemScheView = document.getElementsByClassName("schedule-view-main")[0];
 					//フラグが立っていない場合（セルが白い場合）
 					if(colorFlg == 0){
 						//セルの背景色を#c7c8fcに変更
 						document.getElementById(this.id).style.backgroundColor = "#c7c8fc";
 						//schedule-view-mainを白く
-						document.getElementsByClassName("schedule-view-main")[0].style.backgroundColor = "white";
+						elemScheView.style.backgroundColor = "white";
+						//スケジュール表示
+						showSchedule(this.id);
+					} else {
+						//schedule-view-mainをグレーアウト
+						elemScheView.style.backgroundColor = "#b8b8b8";
+						//schedule-view-main内の表示をすべて削除
+						while(elemScheView.firstChild){
+							elemScheView.removeChild(elemScheView.firstChild);
+						}
 					}
 				}
 				
