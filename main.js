@@ -13,11 +13,27 @@ function monthCange() {
 	viewTable(yM.slice(0,4), yM.slice(-2));
 }
 
+//スケジュール追加入力関数
+function addSchedule() { 
+	//ダイアログ作成
+	$(".schedule-view-main").append(
+		'<div id="sample-dialog" title="スケジュール登録" style="display:none;">'+
+			'<p>開始時刻を入力してください</p>'+
+		'</div>'
+	);
+	$("#sample-dialog").dialog();
+}
+
 //スケジュール表示関数
 function showSchedule(date) {
 	//日付をyyyy/mm/ddに整形
 	var showDate = date.substr(5, 4) + "/" + date.substr(10, 2) + "/" + date.substr(13, 2);
-	document.getElementsByClassName("schedule-view-main")[0].innerHTML = '<div class="schedule-date">' + showDate + '</div>';
+	
+	//日付表示
+	$(".schedule-view-main").append('<div id="schedule-date">' + showDate + '</div>');
+	
+	//新規登録ボタン追加
+	$(".schedule-view-main").append('<input type="submit" value="新規登録" onClick="addSchedule()">');
 }
 
 //カレンダー表示関数
@@ -81,6 +97,7 @@ function viewTable(year, month) {
 						elemActivedate[l].style.backgroundColor = "white";
 					}
 					
+					//schedule-view-main要素をシンプルな変数に代入
 					var elemScheView = document.getElementsByClassName("schedule-view-main")[0];
 					//フラグが立っていない場合（セルが白い場合）
 					if(colorFlg == 0){
@@ -88,6 +105,11 @@ function viewTable(year, month) {
 						document.getElementById(this.id).style.backgroundColor = "#c7c8fc";
 						//schedule-view-mainを白く
 						elemScheView.style.backgroundColor = "white";
+						
+						//schedule-view-main内の表示をすべて削除
+						while(elemScheView.firstChild){
+							elemScheView.removeChild(elemScheView.firstChild);
+						}
 						//スケジュール表示
 						showSchedule(this.id);
 					} else {
