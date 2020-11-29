@@ -17,11 +17,15 @@ function monthCange() {
 function addSchedule() { 
 	//ダイアログ作成
 	$(".schedule-view-main").append(
-		'<div id="sample-dialog" title="スケジュール登録" style="display:none;">'+
+		'<div class="dialog" title="スケジュール登録" style="display:none;">'+
 			'<p>開始時刻を入力してください</p>'+
+			'<input type="time">'+
+			'<p>終了時刻を入力してください</p>'+
+			'<input type="time">'+
+			'<p>スケジュール内容を入力してください</p>'+
+			'<textarea cols="50" rows="5"></textarea>'+
 		'</div>'
 	);
-	$("#sample-dialog").dialog();
 }
 
 //スケジュール表示関数

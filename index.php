@@ -13,18 +13,18 @@ try{
 }
 
 
-//scheduleテーブルがない場合にテーブルを作成するsql
-$sql ='CREATE TABLE '.$dbname.'.schedule (
+//scheduleテーブルがなければ作成するsql
+$sql ='CREATE TABLE IF NOT EXISTS '.$dbname.'.schedule (
 	No INT AUTO_INCREMENT,
-	date DATETIME NOT NULL,
+	date DATE NOT NULL,
+	start TIME NOT NULL,
+	end TIME NOT NULL,
 	schedule VARCHAR(300),
 	PRIMARY KEY (No)
 ) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci';
 
-
 //sqlを実行
 $stmt = $dbh->query($sql);
-//$result = $stmt->fetchall();
 
 //index.htmlを読み込む
 include_once("index.html");
