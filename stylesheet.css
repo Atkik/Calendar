@@ -28,6 +28,10 @@ width: 100%
 	font-size: 40px;
 }
 
+.ui-dialog {
+	width:500px;
+}
+
 .calendar-view {
 	float: right;
 	display: inline-block;

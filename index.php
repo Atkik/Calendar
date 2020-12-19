@@ -1,4 +1,5 @@
 <?php
+
 //データベース接続用の情報を代入
 $dbname='heroku_eecf5ac830e1d0f';
 $dsn = 'mysql:dbname='.$dbname.';host=us-cdbr-east-02.cleardb.com';
@@ -26,9 +27,9 @@ $sql ='CREATE TABLE IF NOT EXISTS '.$dbname.'.schedule (
 //sqlを実行
 $stmt = $dbh->query($sql);
 
+$dbh = null;
+
 //index.htmlを読み込む
 include_once("index.html");
-
-$dbh = null;
 
 ?>

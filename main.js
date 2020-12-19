@@ -1,14 +1,13 @@
 //年月表示関数
 function viewMonth(year, month) {
-	var monthOutput = document.getElementsByClassName("month-view");
 	//yyyy-MMを取得（月は0埋め）
 	var yM = year + "-" + ("0" + month).slice(-2);
-	monthOutput[0].innerHTML = '<input type="month" id="select-month" value=' + yM + ' onchange="monthCange()">';
+	$(".month-view")[0].innerHTML = '<input type="month" id="select-month" value=' + yM + ' onchange="monthCange()">';
 }
 
 //年月変更関数
 function monthCange() {
-	var yM = document.getElementById("select-month").value;
+	var yM = $("#select-month").value;
 	//変更された年月でカレンダー表示
 	viewTable(yM.slice(0,4), yM.slice(-2));
 }
@@ -26,6 +25,24 @@ function addSchedule() {
 			'<textarea cols="50" rows="5"></textarea>'+
 		'</div>'
 	);
+	$(".dialog").dialog({
+		width : 600,
+		// ボタンを設定
+		buttons: {
+			// 登録ボタン
+			"登録": function(event) {
+				// event.target でボタンの要素を参照
+				alert("登録しました。");
+				$(this).dialog("close");
+			},
+			// キャンセルボタン
+			"キャンセル": function() {
+				$(this).dialog("close");
+			}
+		},
+		//×ボタン削除
+		open:function(event, ui){ $(".ui-dialog-titlebar-close").hide();}
+	});
 }
 
 //スケジュール表示関数
@@ -50,14 +67,11 @@ function viewTable(year, month) {
 	var endMonth = new Date(year, month, 0);
 	var endMonthDate = endMonth.getDate();
 	
-	//カレンダーテーブルクラス取得
-	var monthTable = document.getElementsByClassName("calendar-table");
-	
 	//既にカレンダーに日付が表示されている場合は一度消去
-	var rowsCount = monthTable[0].rows.length;
+	var rowsCount = $(".calendar-table")[0].rows.length;
 	if(rowsCount > 1) {
 		for(var i = 0; i < rowsCount-1; i++) {
-			monthTable[0].deleteRow(1);
+			$(".calendar-table")[0].deleteRow(1);
 		}
 	}
 	
@@ -69,7 +83,7 @@ function viewTable(year, month) {
 	//カレンダー表示
 	var j = 0;
 	while(j == 0){
-		var weekRow = monthTable[0].insertRow(-1);
+		var weekRow = $(".calendar-table")[0].insertRow(-1);
 		for(var k = 0; k < 7; k++) {
 			var dayCell = weekRow.insertCell(-1);
 			//月初の曜日から月末まで日付を表示する
@@ -91,14 +105,13 @@ function viewTable(year, month) {
 				dayCell.onclick = function(){
 					//セルが白くなかったらフラグを立てる
 					var colorFlg = 0;
-					if(document.getElementById(this.id).style.backgroundColor != "white"){
+					if($('#'+this.id).css("background-color") != "rgb(255, 255, 255)"){
 						colorFlg = 1;
 					}
 					
 					//active-dateクラスのセルをすべて白くする
-					var elemActivedate = document.getElementsByClassName("active-date");
-					for (var l = 0; l < elemActivedate.length; l++){
-						elemActivedate[l].style.backgroundColor = "white";
+					for (var l = 0; l < $(".active-date").length; l++){
+						$(".active-date").eq(l).css("background-color" , "white");
 					}
 					
 					//schedule-view-main要素をシンプルな変数に代入
@@ -106,23 +119,21 @@ function viewTable(year, month) {
 					//フラグが立っていない場合（セルが白い場合）
 					if(colorFlg == 0){
 						//セルの背景色を#c7c8fcに変更
-						document.getElementById(this.id).style.backgroundColor = "#c7c8fc";
+						$('#'+this.id).css("backgroundColor" , "#c7c8fc");
 						//schedule-view-mainを白く
-						elemScheView.style.backgroundColor = "white";
+						$(".schedule-view-main").css("backgroundColor" , "white");
 						
 						//schedule-view-main内の表示をすべて削除
-						while(elemScheView.firstChild){
-							elemScheView.removeChild(elemScheView.firstChild);
-						}
+						$(".schedule-view-main").empty();
+						
 						//スケジュール表示
 						showSchedule(this.id);
 					} else {
 						//schedule-view-mainをグレーアウト
-						elemScheView.style.backgroundColor = "#b8b8b8";
+						$(".schedule-view-main").css("backgroundColor" , "#b8b8b8");
+						
 						//schedule-view-main内の表示をすべて削除
-						while(elemScheView.firstChild){
-							elemScheView.removeChild(elemScheView.firstChild);
-						}
+						$(".schedule-view-main").empty();
 					}
 				}
 				
