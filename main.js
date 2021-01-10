@@ -13,31 +13,55 @@ function monthCange() {
 }
 
 //スケジュール追加入力関数
-function addSchedule() { 
+function addSchedule(selectyear, selectmonth, selectdate) { 
+	//日付をDB挿入用に整形
+	var inputDate = selectyear + "-" + selectmonth + "-" + selectdate;
 	//ダイアログ作成
 	$(".schedule-view-main").append(
 		'<div class="dialog" title="スケジュール登録" style="display:none;">'+
 			'<p>開始時刻を入力してください</p>'+
-			'<input type="time">'+
+			'<input type="time" id="input-start">'+
 			'<p>終了時刻を入力してください</p>'+
-			'<input type="time">'+
+			'<input type="time" id="input-end">'+
 			'<p>スケジュール内容を入力してください</p>'+
-			'<textarea cols="50" rows="5"></textarea>'+
+			'<textarea cols="50" rows="5" id="input-schedule"></textarea>'+
 		'</div>'
 	);
+	
 	$(".dialog").dialog({
 		width : 600,
 		// ボタンを設定
 		buttons: {
 			// 登録ボタン
 			"登録": function(event) {
-				// event.target でボタンの要素を参照
-				alert("登録しました。");
+				//registration.php実行
+				var request = new XMLHttpRequest();
+				request.open('POST', 'insert.php', true);
+				request.onreadystatechange = function (){
+					switch(request.readyState){
+					//通信が完了した場合
+					case 4:
+						if(request.status == 0){
+							alert("登録に失敗しました。");
+						} else {
+							console.log(request.responseText);
+							// event.target でボタンの要素を参照
+							alert("登録しました。");
+						}
+						break;
+					}
+				};
+				console.log($('#input-start').val() + ", " + $('#input-end').val() + ", " + $('#input-schedule').val());
+				request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				request.send('date=' + inputDate + '&start=' + $("#input-start").val() + '&end=' + $("#input-end").val() + '&schedule=' + $("#input-schedule").val());
+				
 				$(this).dialog("close");
+				$(".dialog").remove();
 			},
 			// キャンセルボタン
 			"キャンセル": function() {
 				$(this).dialog("close");
+				$(".dialog").remove();
 			}
 		},
 		//×ボタン削除
@@ -48,13 +72,16 @@ function addSchedule() {
 //スケジュール表示関数
 function showSchedule(date) {
 	//日付をyyyy/mm/ddに整形
-	var showDate = date.substr(5, 4) + "/" + date.substr(10, 2) + "/" + date.substr(13, 2);
+	var selectyear = date.substr(5, 4);
+	var selectmonth = date.substr(10, 2);
+	var selectdate = date.substr(13, 2);
+	var showDate = selectyear + "/" + selectmonth + "/" + selectdate;
 	
 	//日付表示
 	$(".schedule-view-main").append('<div id="schedule-date">' + showDate + '</div>');
 	
 	//新規登録ボタン追加
-	$(".schedule-view-main").append('<input type="submit" value="新規登録" onClick="addSchedule()">');
+	$(".schedule-view-main").append('<input type="submit" value="新規登録" onClick="addSchedule(' + selectyear + ',' + selectmonth + ',' + selectdate + ')">');
 }
 
 //カレンダー表示関数
@@ -94,7 +121,7 @@ function viewTable(year, month) {
 			} else if(dateCount != (endMonthDate + 1)) {
 				//カレンダーセルにactive-dateクラスとdate_yyyymmddのIDを設定
 				dayCell.setAttribute("class","active-date");
-				dayCell.setAttribute("id","date-" + year + "-" + month + "-" + ("0" + dateCount).slice(-2));
+				dayCell.setAttribute("id","date-" + year + "-" + ("0" + month).slice(-2) + "-" + ("0" + dateCount).slice(-2));
 				
 				//背景色を白に設定
 				dayCell.style.backgroundColor = "white";
