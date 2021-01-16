@@ -14,17 +14,19 @@ try{
 }
 
 //データ挿入SQL文
-$sql = 'INSERT INTO '.$dbname.'.schedule (date, start, end, schedule) VALUES (:date, :start, :end, :schedule)';
+$sql = 'SELECT * FROM '.$dbname.'.schedule WHERE date=:date ORDER BY start';
 //実行準備
 $stmt = $dbh -> prepare($sql);
 
 $stmt -> bindValue(':date', $_POST['date']);
-$stmt -> bindValue(':start', $_POST['start']);
-$stmt -> bindValue(':end', $_POST['end']);
-$stmt -> bindValue(':schedule', $_POST['schedule']);
 
 //sqlを実行
 $stmt -> execute();
+
+$selectAray = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+
+header('Content-type: application/json');
+echo json_encode($selectAray);
 
 $dbh = null;
 

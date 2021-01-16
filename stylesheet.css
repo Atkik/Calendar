@@ -28,6 +28,43 @@ width: 100%
 	font-size: 40px;
 }
 
+.schedule-space {
+	margin-top: 20px;
+}
+
+.accordion-mark {
+	color: blue;
+	font-size: 15px;
+}
+
+.schedule-time {
+	color: blue;
+	border-bottom: 1px solid blue;
+	font-size: 20px;
+}
+
+.schedule-content {
+	margin: 10px 10px 0 20px;
+	border: 1px solid black;
+	font-size: 20px;
+	height: 200px;
+}
+
+.schedule-button {
+	margin: 10px 10px 0 auto;
+	text-align: right;
+}
+
+.schedule-button input {
+	width: 90px;
+}
+
+.schedule-time:hover{
+	cursor: default;
+	color: #0000CC;
+	font-size: 21px;
+}
+
 .ui-dialog {
 	width:500px;
 }

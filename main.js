@@ -13,9 +13,9 @@ function monthCange() {
 }
 
 //スケジュール追加入力関数
-function addSchedule(selectyear, selectmonth, selectdate) { 
+function addSchedule(yearPart, monthPart, datePart) { 
 	//日付をDB挿入用に整形
-	var inputDate = selectyear + "-" + selectmonth + "-" + selectdate;
+	var inputDate = yearPart + "-" + monthPart + "-" + datePart;
 	//ダイアログ作成
 	$(".schedule-view-main").append(
 		'<div class="dialog" title="スケジュール登録" style="display:none;">'+
@@ -34,7 +34,7 @@ function addSchedule(selectyear, selectmonth, selectdate) {
 		buttons: {
 			// 登録ボタン
 			"登録": function(event) {
-				//registration.php実行
+				//insert.php実行
 				var request = new XMLHttpRequest();
 				request.open('POST', 'insert.php', true);
 				request.onreadystatechange = function (){
@@ -44,14 +44,12 @@ function addSchedule(selectyear, selectmonth, selectdate) {
 						if(request.status == 0){
 							alert("登録に失敗しました。");
 						} else {
-							console.log(request.responseText);
-							// event.target でボタンの要素を参照
 							alert("登録しました。");
 						}
 						break;
 					}
 				};
-				console.log($('#input-start').val() + ", " + $('#input-end').val() + ", " + $('#input-schedule').val());
+				//送信するデータをテキスト形式に指定
 				request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 				request.send('date=' + inputDate + '&start=' + $("#input-start").val() + '&end=' + $("#input-end").val() + '&schedule=' + $("#input-schedule").val());
 				
@@ -71,17 +69,55 @@ function addSchedule(selectyear, selectmonth, selectdate) {
 
 //スケジュール表示関数
 function showSchedule(date) {
-	//日付をyyyy/mm/ddに整形
-	var selectyear = date.substr(5, 4);
-	var selectmonth = date.substr(10, 2);
-	var selectdate = date.substr(13, 2);
-	var showDate = selectyear + "/" + selectmonth + "/" + selectdate;
+	var yearPart = date.substr(5, 4);
+	var monthPart = date.substr(10, 2);
+	var datePart = date.substr(13, 2);
+	//日付を表示用に整形
+	var showDate = yearPart + "/" + monthPart + "/" + datePart;
 	
 	//日付表示
 	$(".schedule-view-main").append('<div id="schedule-date">' + showDate + '</div>');
 	
 	//新規登録ボタン追加
-	$(".schedule-view-main").append('<input type="submit" value="新規登録" onClick="addSchedule(' + selectyear + ',' + selectmonth + ',' + selectdate + ')">');
+	$(".schedule-view-main").append('<input type="submit" value="新規登録" onClick="addSchedule(' + yearPart + ',' + monthPart + ',' + datePart + ')">');
+	$(".schedule-view-main").append('<div class="schedule-space"></div>');
+	
+	//日付をデータ抽出用に整形
+	var selectDate = yearPart + "-" + monthPart + "-" + datePart;
+	
+	//select.php実行
+	var request = new XMLHttpRequest();
+	request.open('POST', 'select.php', true);
+	request.onreadystatechange = function (){
+		switch(request.readyState){
+		//通信が完了した場合
+		case 4:
+			if(request.status == 0){
+				console.log("DB接続に失敗しました。");
+			} else {
+				//スケジュール一覧を表示
+				for(var i = 0; i < request.response.length; i++) {
+					$(".schedule-space").append('\
+						<span class="accordion-mark">▶ </span>\
+						<span class="schedule-time">' + request.response[i]["start"] + '　-　'+ request.response[i]["end"] + '</span>\
+						<br>\
+						<div class="schedule-content">' + request.response[i]["schedule"] + '</div>\
+						<div class="schedule-button">\
+							<input type="submit" value="変更">\
+							<input type="submit" value="削除">\
+						</div>\
+						<br>\
+					');
+				}
+			}
+			break;
+		}
+	};
+	//送信するデータをテキスト形式に指定
+	request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	//返ってくる結果をjson形式に指定
+	request.responseType = 'json';
+	request.send('date=' + selectDate);
 }
 
 //カレンダー表示関数
