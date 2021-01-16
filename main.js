@@ -99,17 +99,24 @@ function showSchedule(date) {
 				for(var i = 0; i < request.response.length; i++) {
 					$(".schedule-space").append('\
 						<span class="accordion-mark">▶ </span>\
-						<span class="schedule-time">' + request.response[i]["start"] + '　-　'+ request.response[i]["end"] + '</span>\
-						<br>\
-						<div class="schedule-content">' + request.response[i]["schedule"] + '</div>\
-						<div class="schedule-button">\
-							<input type="submit" value="変更">\
-							<input type="submit" value="削除">\
+						<div class="schedule-time">' + request.response[i]["start"] + '　-　'+ request.response[i]["end"] + '</div>\
+						<div class="accordion-content">\
+							<div class="schedule-content">' + request.response[i]["schedule"] + '</div>\
+							<div class="schedule-button">\
+								<input type="submit" value="変更">\
+								<input type="submit" value="削除">\
+							</div>\
 						</div>\
 						<br>\
 					');
 				}
 			}
+			$('.schedule-time').each(function(){
+				$(this).on('click',function(){
+					$(this).next().slideToggle(150);
+					$(this).next().toggleClass('open');
+				});
+			});
 			break;
 		}
 	};
@@ -118,6 +125,7 @@ function showSchedule(date) {
 	//返ってくる結果をjson形式に指定
 	request.responseType = 'json';
 	request.send('date=' + selectDate);
+	
 }
 
 //カレンダー表示関数

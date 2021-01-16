@@ -37,21 +37,30 @@ width: 100%
 	font-size: 15px;
 }
 
+.accordion-mark.open {
+	transform: rotate(-45deg);
+}
+
 .schedule-time {
 	color: blue;
 	border-bottom: 1px solid blue;
 	font-size: 20px;
+	display: inline-block;
+}
+
+.accordion-content {
+	margin: 10px 10px 0 20px;
+	display: none;
 }
 
 .schedule-content {
-	margin: 10px 10px 0 20px;
 	border: 1px solid black;
 	font-size: 20px;
 	height: 200px;
 }
 
 .schedule-button {
-	margin: 10px 10px 0 auto;
+	margin: 10px 0 0 0;
 	text-align: right;
 }
 
