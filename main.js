@@ -55,6 +55,11 @@ function addSchedule(yearPart, monthPart, datePart) {
 				
 				$(this).dialog("close");
 				$(".dialog").remove();
+				
+				//schedule-view-main内の表示をすべて削除
+				$(".schedule-view-main").empty();
+				//スケジュール再表示
+				showSchedule("date-" + yearPart + "-" + ("0" + monthPart).slice(-2) + "-" + ("0" + datePart).slice(-2));
 			},
 			// キャンセルボタン
 			"キャンセル": function() {
