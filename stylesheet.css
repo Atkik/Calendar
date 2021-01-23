@@ -32,19 +32,23 @@ width: 100%
 	margin-top: 20px;
 }
 
-.accordion-mark {
+.accordion-trigger {
+	cursor: default;
 	color: blue;
-	font-size: 15px;
+	font-size: 20px;
 }
 
-.accordion-mark.open {
-	transform: rotate(-45deg);
+.accordion-trigger:hover {
+	color: #0000CC;
+	font-size: 21px;
+}
+
+.accordion-mark {
+	display: inline-block;
 }
 
 .schedule-time {
-	color: blue;
 	border-bottom: 1px solid blue;
-	font-size: 20px;
 	display: inline-block;
 }
 
@@ -66,12 +70,6 @@ width: 100%
 
 .schedule-button input {
 	width: 90px;
-}
-
-.schedule-time:hover{
-	cursor: default;
-	color: #0000CC;
-	font-size: 21px;
 }
 
 .ui-dialog {

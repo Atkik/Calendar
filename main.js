@@ -12,10 +12,8 @@ function monthCange() {
 	viewTable(yM.slice(0,4), yM.slice(-2));
 }
 
-//スケジュール追加入力関数
-function addSchedule(yearPart, monthPart, datePart) { 
-	//日付をDB挿入用に整形
-	var inputDate = yearPart + "-" + monthPart + "-" + datePart;
+//スケジュール登録関数
+function insertSchedule(dbDate) { 
 	//ダイアログ作成
 	$(".schedule-view-main").append(
 		'<div class="dialog" title="スケジュール登録" style="display:none;">'+
@@ -30,9 +28,9 @@ function addSchedule(yearPart, monthPart, datePart) {
 	
 	$(".dialog").dialog({
 		width : 600,
-		// ボタンを設定
+		//ボタンを設定
 		buttons: {
-			// 登録ボタン
+			//登録ボタン
 			"登録": function(event) {
 				//insert.php実行
 				var request = new XMLHttpRequest();
@@ -51,7 +49,7 @@ function addSchedule(yearPart, monthPart, datePart) {
 				};
 				//送信するデータをテキスト形式に指定
 				request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-				request.send('date=' + inputDate + '&start=' + $("#input-start").val() + '&end=' + $("#input-end").val() + '&schedule=' + $("#input-schedule").val());
+				request.send('&date=' + dbDate + '&start=' + $("#input-start").val() + '&end=' + $("#input-end").val() + '&schedule=' + $("#input-schedule").val());
 				
 				$(this).dialog("close");
 				$(".dialog").remove();
@@ -59,9 +57,9 @@ function addSchedule(yearPart, monthPart, datePart) {
 				//schedule-view-main内の表示をすべて削除
 				$(".schedule-view-main").empty();
 				//スケジュール再表示
-				showSchedule("date-" + yearPart + "-" + ("0" + monthPart).slice(-2) + "-" + ("0" + datePart).slice(-2));
+				showSchedule("date-" + dbDate);
 			},
-			// キャンセルボタン
+			//キャンセルボタン
 			"キャンセル": function() {
 				$(this).dialog("close");
 				$(".dialog").remove();
@@ -72,6 +70,122 @@ function addSchedule(yearPart, monthPart, datePart) {
 	});
 }
 
+//スケジュール変更関数
+function updateSchedule(No, start, end, schedule, dbDate) {
+	//ダイアログ作成
+	$(".schedule-view-main").append(
+		'<div class="dialog" title="スケジュール変更" style="display:none;">'+
+			'<p>日付を入力してください</p>'+
+			'<input type="date" value="' + dbDate + '" id="update-date">'+
+			'<p>開始時刻を入力してください</p>'+
+			'<input type="time" value="' + start + '" id="update-start">'+
+			'<p>終了時刻を入力してください</p>'+
+			'<input type="time" value="' + end + '" id="update-end">'+
+			'<p>スケジュール内容を入力してください</p>'+
+			'<textarea cols="50" rows="5" id="update-schedule">' + schedule + '</textarea>'+
+		'</div>'
+	);
+	
+	$(".dialog").dialog({
+		width : 600,
+		// ボタンを設定
+		buttons: {
+			//l変更ボタン
+			"変更": function(event) {
+				//update.php実行
+				var request = new XMLHttpRequest();
+				request.open('POST', 'update.php', true);
+				request.onreadystatechange = function (){
+					switch(request.readyState){
+					//通信が完了した場合
+					case 4:
+						if(request.status == 0){
+							alert("変更に失敗しました。");
+						} else {
+							alert("変更しました。");
+						}
+						break;
+					}
+				};
+				//送信するデータをテキスト形式に指定
+				request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				request.send('&dataNo=' + No + '&date=' + $("#update-date").val() + '&start=' + $("#update-start").val() + '&end=' + $("#update-end").val() + '&schedule=' + $("#update-schedule").val());
+				
+				$(this).dialog("close");
+				$(".dialog").remove();
+				
+				//schedule-view-main内の表示をすべて削除
+				$(".schedule-view-main").empty();
+				//スケジュール再表示
+				showSchedule("date-" + dbDate);
+			},
+			//キャンセルボタン
+			"キャンセル": function() {
+				$(this).dialog("close");
+				$(".dialog").remove();
+			}
+		},
+		//×ボタン削除
+		open:function(event, ui){ $(".ui-dialog-titlebar-close").hide();}
+	});
+}
+
+//スケジュール削除関数
+function deleteSchedule(No, start, end, schedule, dbDate) {
+	//ダイアログ作成
+	$(".schedule-view-main").append(
+		'<div class="dialog" title="スケジュール削除" style="display:none;">'+
+			'<p>本当にこのスケジュールを削除しますか？</p>'+
+			'<p>' + start + ' - ' + end + '</p>'+
+			'<div style="border: 1px solid black">' + schedule + '</div>'+
+		'</div>'
+	);
+	
+	$(".dialog").dialog({
+		width : 600,
+		// ボタンを設定
+		buttons: {
+			//削除ボタン
+			"はい": function(event) {
+				//delete.php実行
+				var request = new XMLHttpRequest();
+				request.open('POST', 'delete.php', true);
+				request.onreadystatechange = function (){
+					switch(request.readyState){
+					//通信が完了した場合
+					case 4:
+						if(request.status == 0){
+							alert("削除に失敗しました。");
+						} else {
+							alert("削除しました。");
+						}
+						break;
+					}
+				};
+				//送信するデータをテキスト形式に指定
+				request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				request.send('&dataNo=' + No);
+				
+				$(this).dialog("close");
+				$(".dialog").remove();
+				
+				//schedule-view-main内の表示をすべて削除
+				$(".schedule-view-main").empty();
+				//スケジュール再表示
+				showSchedule("date-" + dbDate);
+			},
+			// キャンセルボタン
+			"いいえ": function() {
+				$(this).dialog("close");
+				$(".dialog").remove();
+			}
+		},
+		//×ボタン削除
+		open:function(event, ui){ $(".ui-dialog-titlebar-close").hide();}
+	});
+	
+}
+
 //スケジュール表示関数
 function showSchedule(date) {
 	var yearPart = date.substr(5, 4);
@@ -79,16 +193,15 @@ function showSchedule(date) {
 	var datePart = date.substr(13, 2);
 	//日付を表示用に整形
 	var showDate = yearPart + "/" + monthPart + "/" + datePart;
+	//日付をデータ操作用に整形
+	var dbDate = yearPart + "-" + monthPart + "-" + datePart;
 	
 	//日付表示
 	$(".schedule-view-main").append('<div id="schedule-date">' + showDate + '</div>');
 	
 	//新規登録ボタン追加
-	$(".schedule-view-main").append('<input type="submit" value="新規登録" onClick="addSchedule(' + yearPart + ',' + monthPart + ',' + datePart + ')">');
+	$(".schedule-view-main").append('<input type="submit" value="新規登録" onClick=\'insertSchedule("' + dbDate + '")\'>');
 	$(".schedule-view-main").append('<div class="schedule-space"></div>');
-	
-	//日付をデータ抽出用に整形
-	var selectDate = yearPart + "-" + monthPart + "-" + datePart;
 	
 	//select.php実行
 	var request = new XMLHttpRequest();
@@ -102,24 +215,41 @@ function showSchedule(date) {
 			} else {
 				//スケジュール一覧を表示
 				for(var i = 0; i < request.response.length; i++) {
-					$(".schedule-space").append('\
-						<span class="accordion-mark">▶ </span>\
-						<div class="schedule-time">' + request.response[i]["start"] + '　-　'+ request.response[i]["end"] + '</div>\
-						<div class="accordion-content">\
-							<div class="schedule-content">' + request.response[i]["schedule"] + '</div>\
-							<div class="schedule-button">\
-								<input type="submit" value="変更">\
-								<input type="submit" value="削除">\
-							</div>\
-						</div>\
-						<br>\
-					');
+					$(".schedule-space").append(
+						'<div class="accordion-trigger">'+
+							'<div class="accordion-mark">▶ </div>'+
+							'<div class="schedule-time">' + request.response[i]["start"] + '　-　'+ request.response[i]["end"] + '</div>'+
+						'</div>'+
+						'<div class="accordion-content">'+
+							'<div class="schedule-content">' + request.response[i]["schedule"] + '</div>'+
+							'<div class="schedule-button">'+
+								//変更/削除ボタンを設置、処理後にスケジュール再表示するため年月日も渡す
+								'<input type="submit" value="変更" onClick=\'updateSchedule(' + request.response[i]["No"] + ',"' + request.response[i]["start"] + '","' + request.response[i]["end"] + '","' + request.response[i]["schedule"] + '","' + dbDate + '")\'>'+
+								'<input type="submit" value="削除" onClick=\'deleteSchedule(' + request.response[i]["No"] + ',"' + request.response[i]["start"] + '","' + request.response[i]["end"] + '","' + request.response[i]["schedule"] + '","' + dbDate + '")\'>'+
+							'</div>'+
+						'</div>'+
+						'<br>'
+					);
 				}
 			}
-			$('.schedule-time').each(function(){
+			
+			//▶マーク回転フラグ
+			var rotateFlag = 0;
+			//accordion-triggerクラスの要素すべてに対して処理を実行
+			$('.accordion-trigger').each(function(){
 				$(this).on('click',function(){
+					//隣接する要素を表示
 					$(this).next().slideToggle(150);
 					$(this).next().toggleClass('open');
+					//フラグが立っていなければ▶マークを90°回転させる
+					if(rotateFlag==0){
+						$('.accordion-mark',this).css('transform', 'rotate(90deg)');
+						rotateFlag=1;
+					//フラグが立っていれば▶マークをもとに戻す
+					} else {
+						$('.accordion-mark',this).css('transform', 'rotate(0deg)');
+						rotateFlag=0;
+					}
 				});
 			});
 			break;
@@ -129,7 +259,7 @@ function showSchedule(date) {
 	request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	//返ってくる結果をjson形式に指定
 	request.responseType = 'json';
-	request.send('date=' + selectDate);
+	request.send('date=' + dbDate);
 	
 }
 
