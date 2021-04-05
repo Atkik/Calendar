@@ -1,10 +1,6 @@
 <?php
 
-//データベース接続用の情報を代入
-$dbname='heroku_eecf5ac830e1d0f';
-$dsn = 'mysql:dbname='.$dbname.';host=us-cdbr-east-02.cleardb.com';
-$user = 'b94fd4abf6b46b';
-$password = 'b0e7c029';
+require('db_info.php');
 
 try{
     $dbh = new PDO($dsn, $user, $password);
